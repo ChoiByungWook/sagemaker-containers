@@ -25,7 +25,7 @@ SUCCESS_CODE = 0
 DEFAULT_FAILURE_CODE = 1
 
 
-def _get_valid_exit_code(exit_code):
+def _get_valid_failure_exit_code(exit_code):
     try:
         valid_exit_code = int(exit_code)
     except ValueError:
@@ -106,7 +106,7 @@ def train():
         logger.error(failure_msg)
 
         error_number = getattr(e, 'errno', DEFAULT_FAILURE_CODE)
-        exit_code = _get_valid_exit_code(error_number)
+        exit_code = _get_valid_failure_exit_code(error_number)
     finally:
         if intermediate_sync:
             intermediate_sync.join()
