@@ -23,7 +23,7 @@ SUCCESS_CODE = 0
 DEFAULT_FAILURE_CODE = 1
 
 
-def _get_valid_exit_code(exit_code):
+def _get_valid_failure_exit_code(exit_code):
     try:
         valid_exit_code = int(exit_code)
     except ValueError:
@@ -52,8 +52,8 @@ class Trainer(object):
             message = 'uncaught exception during training: {}\n{}\n'.format(e, trc)
             logger.error(message)
             TrainingEnvironment.write_failure_file(message, base_dir)
-            error_number = DEFAULT_FAILURE_CODE if not hasattr(e, 'errno') else e.errno
-            exit_code = _get_valid_exit_code(error_number)
+            error_number = e.errno if hasattr(e, 'errno') else DEFAULT_FAILURE_CODE
+            exit_code = _get_valid_failure_exit_code(error_number)
             raise e
         finally:
             # Since threads in Python cannot be stopped, this is the only way to stop the application
